@@ -13,8 +13,10 @@ import {
 import {
   ArrowLeft,
   Bot,
+  Box,
   Calendar,
   Clock,
+  Grid2x2,
   Lock,
   MapPin,
   RefreshCw,
@@ -54,6 +56,7 @@ import { EventPoster } from '../components/EventPoster';
 import { Button, SubmitButton } from '../components/FormControls';
 import { SeatMapSkeleton } from '../components/Skeletons';
 import { AuditoriumSeatMap } from '../components/seatmap/AuditoriumSeatMap';
+import { AuditoriumSeatMap3D } from '../components/seatmap/AuditoriumSeatMap3D';
 import { SeatHeatControls } from '../components/seatmap/SeatHeatControls';
 import { SeatSensePanel } from '../components/seatmap/SeatSensePanel';
 import { SeatShieldBanner } from '../components/seatmap/SeatShieldBanner';
@@ -90,6 +93,7 @@ function SeatMapWorkspace({
   );
 
   const [viewMode, setViewMode] = useState<SeatViewMode>('availability');
+  const [mapDimension, setMapDimension] = useState<'3d' | '2d'>('3d');
   const [aiRecommendedIds, setAiRecommendedIds] = useState<string[]>([]);
   const [conflicts, setConflicts] = useState<SeatConflict[]>([]);
   const [squadOpen, setSquadOpen] = useState(false);
@@ -442,7 +446,9 @@ function SeatMapWorkspace({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 className="font-heading text-lg font-bold text-slate-900 dark:text-[#F8FAFC]">
-                Interactive Auditorium Map
+                {mapDimension === '3d'
+                  ? 'Interactive 3D Auditorium'
+                  : 'Interactive Auditorium Map'}
               </h2>
               <p className="text-xs text-slate-500 dark:text-[#94A3B8]">
                 <span className="font-mono-num font-semibold text-emerald-600 dark:text-emerald-400">
@@ -459,14 +465,49 @@ function SeatMapWorkspace({
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setMobileAiOpen(true)}
-              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#8B5CF6]/15 px-3 text-xs font-semibold text-[#6D28D9] dark:text-violet-300 lg:hidden"
-            >
-              <Sparkles className="h-4 w-4" aria-hidden="true" />
-              <span>SeatSense AI</span>
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <div
+                role="group"
+                aria-label="Auditorium display dimension"
+                className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-100/90 p-1 dark:border-slate-700 dark:bg-[#090E1C]"
+              >
+                <button
+                  type="button"
+                  onClick={() => setMapDimension('3d')}
+                  aria-pressed={mapDimension === '3d'}
+                  className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${
+                    mapDimension === '3d'
+                      ? 'bg-[#6366F1] text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900 dark:text-[#94A3B8] dark:hover:text-white'
+                  }`}
+                >
+                  <Box className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>3D View</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMapDimension('2d')}
+                  aria-pressed={mapDimension === '2d'}
+                  className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${
+                    mapDimension === '2d'
+                      ? 'bg-[#6366F1] text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900 dark:text-[#94A3B8] dark:hover:text-white'
+                  }`}
+                >
+                  <Grid2x2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>2D Grid</span>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setMobileAiOpen(true)}
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#8B5CF6]/15 px-3 text-xs font-semibold text-[#6D28D9] dark:text-violet-300 lg:hidden"
+              >
+                <Sparkles className="h-4 w-4" aria-hidden="true" />
+                <span>SeatSense AI</span>
+              </button>
+            </div>
           </div>
 
           <SeatHeatControls
@@ -476,14 +517,28 @@ function SeatMapWorkspace({
             recommendedCount={aiRecommendedIds.length}
           />
 
-          <AuditoriumSeatMap
-            seats={seats}
-            selectedSeatIds={optimisticSeatIds}
-            aiRecommendedIds={aiRecommendedIds}
-            conflictedSeatIds={conflicts.map((c) => c.originalSeat.id)}
-            viewMode={viewMode}
-            onToggleSeat={handleToggleSeat}
-          />
+          {mapDimension === '3d' ? (
+            <AuditoriumSeatMap3D
+              eventTitle={event.title}
+              venue={event.venue}
+              hall={event.hall}
+              seats={seats}
+              selectedSeatIds={optimisticSeatIds}
+              aiRecommendedIds={aiRecommendedIds}
+              conflictedSeatIds={conflicts.map((c) => c.originalSeat.id)}
+              viewMode={viewMode}
+              onToggleSeat={handleToggleSeat}
+            />
+          ) : (
+            <AuditoriumSeatMap
+              seats={seats}
+              selectedSeatIds={optimisticSeatIds}
+              aiRecommendedIds={aiRecommendedIds}
+              conflictedSeatIds={conflicts.map((c) => c.originalSeat.id)}
+              viewMode={viewMode}
+              onToggleSeat={handleToggleSeat}
+            />
+          )}
         </section>
 
         {/* Right Sidebar: Booking Summary + Desktop SeatSense AI */}
