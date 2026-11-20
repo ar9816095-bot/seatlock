@@ -1,0 +1,242 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --sl-bg: #F8FAFC;
+    --sl-surface: #FFFFFF;
+    --sl-surface-elevated: #F1F5F9;
+    --sl-border: rgba(15, 23, 42, 0.10);
+    --sl-primary: #4F46E5;
+    --sl-primary-bright: #6366F1;
+    --sl-secondary: #7C3AED;
+    --sl-accent: #0891B2;
+    --sl-text: #0F172A;
+    --sl-text-muted: #475569;
+    --sl-success: #059669;
+    --sl-warning: #D97706;
+    --sl-error: #DC2626;
+    --sl-font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --sl-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --sl-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --sl-font-scale: 1;
+  }
+
+  .dark {
+    --sl-bg: #090E1C;
+    --sl-surface: #151D30;
+    --sl-surface-elevated: #1C2640;
+    --sl-border: rgba(148, 163, 184, 0.16);
+    --sl-primary: #6366F1;
+    --sl-primary-bright: #818CF8;
+    --sl-secondary: #8B5CF6;
+    --sl-accent: #22D3EE;
+    --sl-text: #F8FAFC;
+    --sl-text-muted: #94A3B8;
+    --sl-success: #10B981;
+    --sl-warning: #F59E0B;
+    --sl-error: #EF4444;
+  }
+
+  .high-contrast {
+    --sl-border: rgba(15, 23, 42, 0.55);
+    --sl-text-muted: #1E293B;
+  }
+
+  .dark.high-contrast {
+    --sl-bg: #030712;
+    --sl-surface: #0F172A;
+    --sl-border: rgba(248, 250, 252, 0.45);
+    --sl-text: #FFFFFF;
+    --sl-text-muted: #E2E8F0;
+    --sl-primary: #818CF8;
+    --sl-accent: #67E8F9;
+  }
+
+  html[data-text-size="sm"] {
+    font-size: 14px;
+  }
+
+  html[data-text-size="md"],
+  html:not([data-text-size]) {
+    font-size: 16px;
+  }
+
+  html[data-text-size="lg"] {
+    font-size: 18px;
+  }
+
+  body {
+    font-family: var(--sl-font-body);
+    background-color: var(--sl-bg);
+    color: var(--sl-text);
+    overflow-x: hidden;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--sl-font-heading);
+    text-wrap: balance;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--sl-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Live Theme Preset & Custom Background Colour bindings across all routed screens */
+html[data-custom-theme="true"] body,
+html[data-custom-theme="true"] .sl-app-shell {
+  background-color: var(--sl-bg) !important;
+  color: var(--sl-text);
+}
+
+html[data-custom-theme="true"] header {
+  background-color: color-mix(in srgb, var(--sl-bg) 88%, transparent) !important;
+  border-color: var(--sl-border) !important;
+}
+
+html[data-custom-theme="true"] .dark\:bg-\[\#151D30\],
+html[data-custom-theme="true"]:not(.dark) .bg-white {
+  background-color: var(--sl-surface) !important;
+}
+
+html[data-custom-theme="true"].dark .dark\:bg-\[\#090E1C\],
+html[data-custom-theme="true"]:not(.dark) .bg-\[\#F8FAFC\] {
+  background-color: var(--sl-bg) !important;
+}
+
+html[data-custom-theme="true"] .bg-\[\#6366F1\] {
+  background-color: var(--sl-primary) !important;
+}
+
+html[data-custom-theme="true"] .bg-\[\#8B5CF6\] {
+  background-color: var(--sl-secondary) !important;
+}
+
+html[data-custom-theme="true"] .text-\[\#4F46E5\],
+html[data-custom-theme="true"].dark .dark\:text-\[\#818CF8\] {
+  color: var(--sl-primary-bright) !important;
+}
+
+html[data-custom-theme="true"].dark .dark\:text-\[\#22D3EE\] {
+  color: var(--sl-accent) !important;
+}
+
+html[data-custom-theme="true"] .border-\[\#6366F1\] {
+  border-color: var(--sl-primary) !important;
+}
+
+.font-heading {
+  font-family: var(--sl-font-heading);
+}
+
+.font-mono-num {
+  font-family: var(--sl-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion support (both OS and AccessPlus toggle) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* React 19 ViewTransition smooth cross-fade & scale */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Subtle voice waveform bars */
+@keyframes sl-wave {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+.animate-sl-wave {
+  animation: sl-wave 0.9s ease-in-out infinite;
+}
+
+/* Subtle ticket reveal & checkmark draw */
+@keyframes sl-check-draw {
+  0% { stroke-dashoffset: 64; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-sl-check {
+  stroke-dasharray: 64;
+  stroke-dashoffset: 0;
+  animation: sl-check-draw 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Confetti gentle fall */
+@keyframes sl-confetti-fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(140px) rotate(320deg); opacity: 0; }
+}
+
+.animate-sl-confetti {
+  animation: sl-confetti-fall 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Ticket perforated cutouts */
+.ticket-notch-left,
+.ticket-notch-right {
+  position: relative;
+}
+
+.ticket-notch-left::before,
+.ticket-notch-right::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background-color: var(--sl-bg);
+  transform: translateY(-50%);
+}
+
+.ticket-notch-left::before {
+  left: -12px;
+}
+
+.ticket-notch-right::after {
+  right: -12px;
+}
+
+/* Print layout for SeatPass Digital Ticket */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-ticket-only {
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+    break-inside: avoid;
+  }
+}

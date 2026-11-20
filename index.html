@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>SEATLOCK UI — Your Seat. Your Choice. Zero Chaos.</title>
+    <meta
+      name="description"
+      content="SEATLOCK is an AI-powered university event seat-booking platform with interactive auditorium seat maps, SeatSense AI recommendations, SquadSync group seating, SeatShield conflict recovery, and digital SeatPass tickets."
+    />
+    <meta property="og:title" content="SEATLOCK UI — Your Seat. Your Choice. Zero Chaos." />
+    <meta
+      property="og:description"
+      content="AI-powered university event seat-booking platform designed to simplify event discovery, seat selection, and zero-chaos booking."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#090E1C" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="SEATLOCK" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('seatlock_preferences_v1');
+          var theme = 'system';
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.theme) theme = parsed.theme;
+            if (parsed && parsed.highContrast) document.documentElement.classList.add('high-contrast');
+            if (parsed && parsed.reducedMotion) document.documentElement.classList.add('reduce-motion');
+            if (parsed && parsed.textSize) document.documentElement.dataset.textSize = parsed.textSize;
+          }
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = theme === 'dark' || (theme === 'system' && prefersDark);
+          document.documentElement.classList.toggle('dark', isDark);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', isDark ? '#090E1C' : '#F8FAFC');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-[#F8FAFC] text-[#0F172A] dark:bg-[#090E1C] dark:text-[#F8FAFC] antialiased selection:bg-[#6366F1]/30">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "SEATLOCK UI",
+  "description": "Your Seat. Your Choice. Zero Chaos. AI-powered university event seat-booking platform with interactive seat maps, smart recommendations, conflict recovery, and digital SeatPass tickets.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
